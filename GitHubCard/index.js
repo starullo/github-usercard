@@ -1,7 +1,23 @@
+import axios from 'axios'
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
+*/
+const div = document.querySelector('.cards');
+const container = document.querySelector('.container');
+axios.get('https://api.github.com/users/starullo').then(response=>{
+  div.appendChild(cardCreator(response.data));
+  // return response;
+})/* stretch vvv 
+.then(response=>{
+Array.from(response.data.followers_url).forEach(follower=>{
+  axios.get(`${follower}`)
+  .then(response=>{
+    div.appendChild(cardCreator(response.data))
+  })
+})
+});
 */
 
 /*
@@ -28,8 +44,14 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
 
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+followersArray.forEach(userName=>{
+  axios.get(`https://api.github.com/users/${userName}`)
+  .then(response=>{
+    div.appendChild(cardCreator(response.data));
+  })
+});
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -49,6 +71,104 @@ const followersArray = [];
       </div>
     </div>
 */
+function cardCreator({avatar_url, name, login, location, url, followers, following, bio, blog, company, email}) {
+
+  /* creating elements */
+  const cont = document.createElement('div');
+  const img = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const h3 = document.createElement('h3');
+  const nameP = document.createElement('p');
+  const locationP = document.createElement('p');
+  const profileP = document.createElement('p');
+  const a = document.createElement('a');
+  const followersP = document.createElement('p');
+  const followingP = document.createElement('p');
+  const bioP = document.createElement('p');
+
+  /* stretch*/
+  /* creating additional elements*/
+  const expand = document.createElement('div');
+  const button = document.createElement('button');
+  const blogH5 = document.createElement('h5');
+  const compH5 = document.createElement('h5');
+  const emailH5 = document.createElement('h5');
+  const blogP = document.createElement('p');
+  const compP = document.createElement('p');
+  const emailP = document.createElement('p');
+
+  /*styling/adding content for additional elements */
+  expand.classList.add('hidden');
+  expand.classList.add('card');
+  button.style.height = '50px';
+  button.style.width = '70px';
+  button.style.backgroundColor = 'pink';
+  button.style.color = 'white';
+  button.textContent = 'Additional Info';
+  emailH5.textContent = 'Email Address:';
+  if (email === null) {
+    emailP.textContent = 'User has not entered an email address';
+  } else {
+    emailP.textContent = email;
+  }
+  blogH5.textContent = 'Blog:';
+  if (blog) {
+    blogP.textContent = blog;
+  } else {
+    blogP.textContent = 'User has not entered a blog url';
+  }
+  compH5.textContent = 'Company:';
+  if (company === null) {
+    compP.textContent = 'User has not entered a company';
+  } else {
+    compP.textContent = company;
+  }
+
+
+
+  /*event listener */
+  button.addEventListener('click', obj=>{
+    expand.classList.toggle('hidden');
+  })
+
+  /*adding classes */
+  cont.classList.add('card');
+  cardInfo.classList.add('card-info');
+  h3.classList.add('name');
+  nameP.classList.add('username');
+
+  /*adding content */
+  img.src = avatar_url;
+  h3.textContent = name;
+  nameP.textContent = login;
+  locationP.textContent = location;
+  a.href = url;
+  followersP.textContent = followers;
+  followingP.textContent = following;
+  bioP.textContent = bio;
+
+  /*structuring*/
+  cont.appendChild(img);
+  cont.appendChild(cardInfo);
+  cardInfo.appendChild(h3);
+  cardInfo.appendChild(nameP);
+  cardInfo.appendChild(locationP);
+  cardInfo.appendChild(profileP);
+  profileP.appendChild(a);
+  cardInfo.appendChild(followersP);
+  cardInfo.appendChild(followingP);
+  cardInfo.appendChild(bioP);
+  cardInfo.appendChild(button);
+  cardInfo.appendChild(expand);
+  expand.appendChild(emailH5)
+  expand.appendChild(emailP);
+  expand.appendChild(blogH5);
+  expand.appendChild(blogP);
+  expand.appendChild(compH5);
+  expand.appendChild(compP);
+
+  return cont;
+}
 
 /*
   List of LS Instructors Github username's:
