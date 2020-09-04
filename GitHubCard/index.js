@@ -5,11 +5,10 @@ import axios from 'axios'
     https://api.github.com/users/<your name>
 */
 const div = document.querySelector('.cards');
-const container = document.querySelector('.container');
 axios.get('https://api.github.com/users/starullo').then(response=>{
   div.appendChild(cardCreator(response.data));
   // return response;
-})/* stretch vvv 
+})/* stretch 
 .then(response=>{
 Array.from(response.data.followers_url).forEach(follower=>{
   axios.get(`${follower}`)
@@ -71,7 +70,7 @@ followersArray.forEach(userName=>{
       </div>
     </div>
 */
-function cardCreator({avatar_url, name, login, location, url, followers, following, bio, blog, company, email}) {
+function cardCreator({avatar_url, name, login, location, html_url, followers, following, bio, blog, company, email}) {
 
   /* creating elements */
   const cont = document.createElement('div');
@@ -86,7 +85,7 @@ function cardCreator({avatar_url, name, login, location, url, followers, followi
   const followingP = document.createElement('p');
   const bioP = document.createElement('p');
 
-  /* stretch*/
+  /* STRETCH*/
   /* creating additional elements*/
   const expand = document.createElement('div');
   const button = document.createElement('button');
@@ -97,7 +96,7 @@ function cardCreator({avatar_url, name, login, location, url, followers, followi
   const compP = document.createElement('p');
   const emailP = document.createElement('p');
 
-  /*styling/adding content for additional elements */
+  /* STRETCH styling/adding content for additional elements */
   expand.classList.add('hidden');
   expand.classList.add('card');
   button.style.height = '50px';
@@ -107,7 +106,7 @@ function cardCreator({avatar_url, name, login, location, url, followers, followi
   button.textContent = 'Additional Info';
   emailH5.textContent = 'Email Address:';
   if (email === null) {
-    emailP.textContent = 'User has not entered an email address';
+    emailP.textContent = `${name} has not entered an email address`;
   } else {
     emailP.textContent = email;
   }
@@ -115,23 +114,23 @@ function cardCreator({avatar_url, name, login, location, url, followers, followi
   if (blog) {
     blogP.textContent = blog;
   } else {
-    blogP.textContent = 'User has not entered a blog url';
+    blogP.textContent = `${name} has not entered a blog url`;
   }
   compH5.textContent = 'Company:';
   if (company === null) {
-    compP.textContent = 'User has not entered a company';
+    compP.textContent = `${name} has not entered a company`;
   } else {
     compP.textContent = company;
   }
 
 
 
-  /*event listener */
+  /* STRETCH event listener */
   button.addEventListener('click', obj=>{
     expand.classList.toggle('hidden');
   })
 
-  /*adding classes */
+  /* adding classes */
   cont.classList.add('card');
   cardInfo.classList.add('card-info');
   h3.classList.add('name');
@@ -141,12 +140,16 @@ function cardCreator({avatar_url, name, login, location, url, followers, followi
   img.src = avatar_url;
   h3.textContent = name;
   nameP.textContent = login;
-  locationP.textContent = location;
-  a.href = url;
-  followersP.textContent = followers;
-  followingP.textContent = following;
-  bioP.textContent = bio;
-
+  locationP.textContent = `Location: ${location}`;
+  a.href = html_url;
+  a.textContent = html_url;
+  followersP.textContent = `Followers: ${followers}`;
+  followingP.textContent = `Following: ${following}`;
+  if (bio) {
+  bioP.textContent = `Bio: ${bio}`;
+  } else {
+    bioP.textContent = `${name} hasn't entered a bio`;
+  }
   /*structuring*/
   cont.appendChild(img);
   cont.appendChild(cardInfo);
