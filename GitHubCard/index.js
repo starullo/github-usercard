@@ -141,6 +141,7 @@ function cardCreator({avatar_url, name, login, location, html_url, followers, fo
   h3.textContent = name;
   nameP.textContent = login;
   locationP.textContent = `Location: ${location}`;
+  profileP.textContent = `Profile: `
   a.href = html_url;
   a.textContent = html_url;
   followersP.textContent = `Followers: ${followers}`;
